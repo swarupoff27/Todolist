@@ -22,6 +22,7 @@ function addData() {
         }
         allTasks.push(task);
         console.log('\n' + JSON.stringify(allTasks, '\t', 2));
+        // console.log(allTasks);
     }
 }
 
