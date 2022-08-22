@@ -3,8 +3,8 @@ const input = document.getElementById("userInput");
 const counter = document.getElementById("counter");
 
 function taskCounter(){
-    const itemCount = document.querySelectorAll('.fa-check').length;
-    const checkedCount = document.querySelectorAll('.checkmark').length;
+    const itemCount = document.querySelectorAll('li').length;
+    const checkedCount = document.querySelectorAll('.is-done').length;
     const uncheckedCount = itemCount - checkedCount;     
     counter.innerHTML = uncheckedCount;
     // console.log("All tasks: " + itemCount);
@@ -18,7 +18,7 @@ function addData() {
     if (input.value != "") {
         let task = {
             Id: ++id,
-            Task: input.value,
+            Task: input.value
         }
         allTasks.push(task);
         console.log('\n' + JSON.stringify(allTasks, '\t', 2));
@@ -32,7 +32,7 @@ function expandInput() {
         input.focus();
     }
 }
-addtaskbtn.addEventListener("click", expandInput);
+// addtaskbtn.addEventListener("click", expandInput);
 
 
 
@@ -42,23 +42,26 @@ function createListElement() {
         addData();
     }
     const ul = document.querySelector("ul"); //create unordered list
+    ul.classList.add("all-list-items");
+
     const li = document.createElement("li"); //create list item
+    li.classList.add("list-item");
 
     const bullet = document.createElement("span");  //create bullet
     bullet.classList.add('bullet');
-    // bullet.classList.add('bullet-bggrey');
+    bullet.classList.add('bullet-bggrey'); // completed task css class
 
 
     const taskDetails = document.createElement("div");   //create div for task
     taskDetails.classList.add("tasks");
-    // taskDetails.classList.add("done-task");
+    taskDetails.classList.add("done-task"); // completed task css class
 
     const checkdot = document.createElement("span");    //create checkdot
     checkdot.classList.add('checkdot');
-    // checkdot.classList.add('checkdot-border');
+    checkdot.classList.add('checkdot-border'); // completed task css class
 
-    const daydatemonth = document.createElement("p");    //create daydatemonth para
-    daydatemonth.classList.add("daydatemonth");
+    const todoDate = document.createElement("p");    //create day-date-month para
+    todoDate.classList.add("todo-date");
 
     const task = document.createElement("p");     //create task para
     task.classList.add("task");
@@ -66,7 +69,7 @@ function createListElement() {
     const checkmark = document.createElement("i"); //create checkmark
     checkmark.classList.add("fa-solid");
     checkmark.classList.add("fa-check");
-    // checkmark.classList.add("checkmark");
+    checkmark.classList.add("checkmark"); // completed task css class
 
 
 
@@ -77,7 +80,7 @@ function createListElement() {
     li.appendChild(taskDetails);
     li.appendChild(checkdot);
 
-    taskDetails.appendChild(daydatemonth);
+    taskDetails.appendChild(todoDate);
     taskDetails.appendChild(task);
     task.appendChild(document.createTextNode(input.value));
 
@@ -95,9 +98,9 @@ function createListElement() {
     const month = now.getMonth();
 
     // console.log(days[day],",",date,months[month]);
-    daydatemonth.appendChild(document.createTextNode(alldays[day] + ","));
-    daydatemonth.appendChild(document.createTextNode(date + "  "));
-    daydatemonth.appendChild(document.createTextNode(allmonths[month]));
+    todoDate.appendChild(document.createTextNode(alldays[day] + ","));
+    todoDate.appendChild(document.createTextNode(date + "  "));
+    todoDate.appendChild(document.createTextNode(allmonths[month]));
 
     input.value = ""; //Reset text input field
     input.blur();
@@ -106,13 +109,8 @@ function createListElement() {
     const allcheckdots = document.querySelectorAll('.checkdot');
     allcheckdots.forEach((dot) => {
         dot.onclick = (e) => {
-            e.target.classList.toggle("checkmark");
-            e.target.parentNode.classList.toggle("checkdot-border");
-            e.target.parentNode.previousSibling.classList.toggle("done-task");
-            e.target.parentNode.previousSibling.previousSibling.classList.toggle("bullet-bggrey");
+            e.target.closest("li").classList.toggle("is-done");
             taskCounter();
-
-            // e.target.closest("li").classList.toggle("is-done");
         }
     })
 }
@@ -125,14 +123,20 @@ function addListAfterClick() {
     }
 }
 
-addtaskbtn.addEventListener("click", addListAfterClick);
+// addtaskbtn.addEventListener("click", addListAfterClick);
 
 
 function addListOnEnter(e) {
-
     if (input.value.length > 0 && e.key === "Enter") {
         createListElement();
         input.classList.toggle('expandinput');
     }
 }
-input.addEventListener("keypress", addListOnEnter);
+// input.addEventListener("keypress", addListOnEnter);
+
+function init(){
+    addtaskbtn.addEventListener("click", expandInput);
+    addtaskbtn.addEventListener("click", addListAfterClick);
+    input.addEventListener("keypress", addListOnEnter);
+}
+init();
